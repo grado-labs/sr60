@@ -1,0 +1,24 @@
+.*
+!.gitignore
+!.gitattributes
+!.clang-format
+
+# Logs and so on
+**/logs
+
+# Build artifacts
+build/
+
+# Technical Reference for Project
+ref/
+
+# Data sets
+data/
+
+# Real files and folders to play with
+playground/
+
+# Binary files (may be large enough, so use Git LFS track)
+.doc*
+.tar.?z
+.zip
