@@ -14,6 +14,7 @@ include_directories(
 set(
     TEST_RUNNER_SRC
     smoke-test.cpp
+    queue-test.cpp
     test-main.cpp
 )
 
