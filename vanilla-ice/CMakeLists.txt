@@ -16,6 +16,18 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/inc
 )
 
+set(
+    ICE_SOURCES
+    src/ice-runner.cpp
+    src/ice.cpp
+    src/json-line.cpp
+    src/sha256.cpp
+)
+
+# One-Shot Integrity Checker
+add_executable(ice ${ICE_SOURCES})
+target_link_libraries(ice PRIVATE OpenSSL::SSL)
+
 # HTTP Client Sender
 add_executable(sender src/sender.cpp)
 target_link_libraries(sender PRIVATE OpenSSL::SSL)
