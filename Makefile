@@ -21,15 +21,12 @@ TARGET_COLOR := $(RED)
 
 .DEFAULT_GOAL := help
 
-all: build-gtest build-test build-vanilla
+all: build-test build-vanilla
 
 build: build-vanilla
 
-build-gtest:  ## build gtest [`libgtest`]
-	cd vanilla-ice/test/gtest && rm -rf build && mkdir build && cd build && cmake .. && make || cd "${ROOT_DIR}"
-
 build-test:  ## build test [`test-runner`]
-	echo "TBD"
+	cd vanilla-ice/test && rm -rf build && mkdir build && cd build && cmake .. && make || cd "${ROOT_DIR}"
 
 build-vanilla:  ## build demo executables for `vanilla-ice`
 	cd vanilla-ice && rm -rf build && mkdir build && cd build && cmake .. && make || cd "${ROOT_DIR}"
@@ -40,9 +37,9 @@ clean:  ## remove build artifacts
 	rm -rf "${ROOT_DIR}"/vanilla-ice/build
 
 run-test:  ## run `test-runner`
-	echo "TBD"
+	vanilla-ice/test/build/test-runner
 
-test: build-gtest build-test run-test
+test: build-test run-test
 
 help:
 	@echo "${GREEN}-----------------------------------------------------------------${RESET}"
