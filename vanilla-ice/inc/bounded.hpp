@@ -30,25 +30,10 @@ template <typename T, typename Priority = uint32_t> class safe_priority_queue {
     return true;
   }
 
-  std::optional<T> top() {
-    std::unique_lock lock(mutex_);
-
-    not_empty_.wait(lock, [&] { return !queue_.empty() || closed_; });
-
-    if (queue_.empty()) {
-      return std::nullopt;
-    }
-
-    T value = const_cast<T&>(queue_.top().value);
-
-    not_empty_.notify_one();
-    return value;
-  }
-
   std::optional<T> pop() {
     std::unique_lock lock(mutex_);
 
-    not_empty_.wait(lock, [&] { return !queue_.empty() || closed_; });
+    not_empty_.wait(lock, [&] { return !queue_.empty() or closed_; });
 
     if (queue_.empty()) {
       return std::nullopt;
