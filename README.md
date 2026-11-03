@@ -9,6 +9,7 @@
     - [1.1.3. Third-party](#113-third-party)
   - [1.2. Design](#12-design)
     - [1.2.1. gena (GENerate Alerts)](#121-gena-generate-alerts)
+      - [1.2.1.1. ar10 (Apply Rule of 10 sec)](#1211-ar-10-apply-rule-of-10-seconds)
     - [1.2.2. ice (Integrity Check Events)](#122-ice-integrity-check-events)
     - [1.2.3. sender](#123-sender)
     - [1.2.4. colya (COLlector Yet Another)](#124-colya-collector-yet-another)
@@ -23,7 +24,7 @@
 - CMake 3.14+;
 - OpenSSL (runtime lib + headers) installed to satisfy `find_package(OpenSSL REQUIRED)`;
 
-**Optional**: Use Python 3.8+ for input data generation (`tools/gen-baseline.py`, `tools/gen-events.py`). Also do not forget about executable bit (`set +x`).`
+**Optional**: Use Python 3.8+ for input data generation (`tools/gen-baseline.py`, `tools/gen-events.py`). Also do not forget about executable bit (`set +x`).
 
 ### 1.1.2. Build
 
@@ -35,7 +36,7 @@ make build
 
 will produce `vanilla-ice/build` executable artifacts:
 
-1. `gena` (TBD)
+1. `gena`
 2. `ice`
 3. `sender`
 4. `colya`
@@ -46,10 +47,10 @@ For getting help, just type `make` or `make help`.
 
 For cleaning up build artifacts, type `make clean`.
 
-**Example:** 1. clean artifacts, 2. build GTest, 3. build unit tests, 4. run unit tests, 5. build `vanilla-ice/build` executables.
+**Example:** 1. clean artifacts, 2. build unit tests, 3. run unit tests, 4. build `vanilla-ice/build` executables.
 
 ```bash
-make clean build-gtest build-test run-test build-vanilla
+make clean build-test run-test build-vanilla
 ```
 
 ### 1.1.3 Third-party
@@ -63,7 +64,50 @@ make clean build-gtest build-test run-test build-vanilla
 
 ### 1.2.1. gena (GENerate Alerts)
 
-TBD.
+Piece of software according to functional requirements:
+
+- get events from file (`events.log`) in [JSON Lines](https://jsonlines.org/) format;
+- for `ProcessStarted` events apply [rule](#1211-ar-10-apply-rule-of-10-seconds), if match → `SuspiciousActivityAlert`;
+
+Getting events from file:
+
+- `sensor` thread read `events.log` → push to `queue` // producers;
+- `queue` w/o busy-wait (use condition_variable), back pressure (desired);
+- `exam` thread apply [rule](#1211-ar-10-apply-rule-of-10-seconds) & send alerts // consumers;
+- grace termination (Ctrl+C);
+
+**Note:** it's better to use **absolute paths** in args.
+
+Overview:
+
+```man
+[IN]
+arg1 - file path (JSON-lines events);
+
+[OUT]
+stdout - JSON lines (alerts) etc.
+
+{"alert":"SuspiciousActivityAlert","ppid":1087","pids":[7093,9678,6964,6403,2699,8612]}
+...
+
+```
+
+Usage example:
+
+```bash
+build/gena tools/events.log | build/sender 127.0.0.3 3333
+```
+
+#### 1.2.1.1. AR-10 (Apply Rule of 10 seconds)
+
+If a process (from `ProcessStarted` event type) has **spawned > 5 children** **within 10 seconds** → alert `SuspiciousActivityAlert`.
+
+Alert must contain:
+
+- PID of suspicious (aka "fertile" parent) proccess // PPID;
+- list of spawned children PIDs // PIDs
+
+Also source code should demonstrate possible concurrent implementation of **sliding window** based on **timestamps**.
 
 ### 1.2.2. ice (Integrity Check Events)
 

@@ -17,12 +17,24 @@ include_directories(
 )
 
 set(
+    GENA_SOURCES
+    src/gena.cpp
+    src/json-line.cpp
+    src/sucker.cpp
+)
+
+set(
     ICE_SOURCES
     src/ice-runner.cpp
     src/ice.cpp
     src/json-line.cpp
     src/sha256.cpp
 )
+
+# Events from File Reader
+# → Apply Rule (Sliding Window / Timestamps)
+# → Generate Alert
+add_executable(gena ${GENA_SOURCES})
 
 # One-Shot Integrity Checker
 add_executable(ice ${ICE_SOURCES})
