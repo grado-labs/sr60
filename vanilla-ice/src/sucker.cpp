@@ -1,47 +1,28 @@
 #include "sucker.hpp"
 
-#include <fstream>
-#include <print>
-
-#include "nlohmann/json.hpp"
-using nlohmann::json;
+#include <chrono>
+#include <thread>
 
 namespace sucker {
 
-void read_range(uint32_t producer_id, const std::filesystem::path& path,
-                std::uintmax_t begin, std::uintmax_t end,
-                bounded::safe_priority_queue<std::string, uint32_t>& queue) {
-  std::ifstream file(path, std::ios::binary);
-  if (!file) {
-    std::print(stderr, "Cannot open `{}`\n", path.c_str());
-    return;
-  }
+using namespace std::chrono_literals;
 
-  file.seekg(static_cast<std::streamoff>(begin));
-  if (!file) {
-    std::print(stderr, "Cannot seek in `{}`\n", path.c_str());
-    return;
-  }
+safe_line_reader::safe_line_reader(std::string path) : file_(std::move(path)) {}
 
-  if (begin != 0) {
-    std::string partial;
-    if (!std::getline(file, partial)) {
-      return;
-    };
-  }
+bool safe_line_reader::next_line(std::string& line) {
+  {
+    std::lock_guard lock(mutex_);
 
-  std::string line;
-  while (static_cast<std::uintmax_t>(file.tellg()) < end and
-         std::getline(file, line)) {
-    if (line.length() == 0) {
-      continue;
-    }
-
-    json j = json::parse(line);
-    if (!queue.push(j["ts"], producer_id, std::move(line))) {
-      return;
+    if (not std::getline(file_, line)) {
+      return false;
     }
   }
+
+  // sleep as required in task:
+  //   1ms is enough to make a mess
+  std::this_thread::sleep_for(1ms);
+
+  return true;
 }
 
 }  // namespace sucker

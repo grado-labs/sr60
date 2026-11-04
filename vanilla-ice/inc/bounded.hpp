@@ -2,7 +2,6 @@
 
 #include <condition_variable>
 #include <cstddef>
-#include <deque>
 #include <mutex>
 #include <optional>
 #include <queue>
@@ -33,7 +32,7 @@ template <typename T, typename Priority = uint32_t> class safe_priority_queue {
   std::optional<T> pop() {
     std::unique_lock lock(mutex_);
 
-    not_empty_.wait(lock, [&] { return !queue_.empty() or closed_; });
+    not_empty_.wait(lock, [&] { return not queue_.empty() or closed_; });
 
     if (queue_.empty()) {
       return std::nullopt;

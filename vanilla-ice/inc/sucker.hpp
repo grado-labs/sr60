@@ -1,15 +1,23 @@
 #pragma once
 
-#include <cstdint>
-#include <filesystem>
+#include <fstream>
+#include <mutex>
 #include <string>
 
 #include "bounded.hpp"
 
 namespace sucker {
 
-void read_range(uint32_t producer_id, const std::filesystem::path& path,
-                std::uintmax_t begin, std::uintmax_t end,
-                bounded::safe_priority_queue<std::string, uint32_t>& queue);
+class safe_line_reader {
+ public:
+  explicit safe_line_reader(std::string path);
+
+ public:
+  bool next_line(std::string& line);
+
+ private:
+  std::ifstream file_;
+  std::mutex mutex_;
+};
 
 }  // namespace sucker

@@ -6768,15 +6768,15 @@
 {"type": "ProcessStarted", "pid": 6285, "ppid": 7001, "name": "certutil.exe", "ts": 1725356774}
 {"type": "FileWritten", "path": "/root/q1/music/track11.ogg", "ts": 1725356775}
 {"type": "FileWritten", "path": "/root/q1/music/track05.ogg", "ts": 1725356776}
-{"type": "ProcessStarted", "pid": 5966, "ppid": 5926, "name": "certutil.exe", "ts": 1725356777}
+{"type": "ProcessStarted", "pid": 5966, "ppid": 2981, "name": "certutil.exe", "ts": 1725356777}
 {"type": "ProcessStarted", "pid": 6948, "ppid": 3303, "name": "smss.exe", "ts": 1725356778}
 {"type": "ProcessStarted", "pid": 259, "ppid": 2981, "name": "svchost.exe", "ts": 1725356779}
-{"type": "ProcessStarted", "pid": 1189, "ppid": 2460, "name": "wscript.exe", "ts": 1725356780}
+{"type": "ProcessStarted", "pid": 1189, "ppid": 2981, "name": "wscript.exe", "ts": 1725356780}
 {"type": "ProcessStarted", "pid": 5703, "ppid": 1294, "name": "reg.exe", "ts": 1725356781}
-{"type": "ProcessStarted", "pid": 4104, "ppid": 1322, "name": "perfmon.exe", "ts": 1725356782}
-{"type": "ProcessStarted", "pid": 7102, "ppid": 8115, "name": "wscript.exe", "ts": 1725356783}
+{"type": "ProcessStarted", "pid": 4104, "ppid": 2981, "name": "perfmon.exe", "ts": 1725356782}
+{"type": "ProcessStarted", "pid": 7102, "ppid": 2981, "name": "wscript.exe", "ts": 1725356783}
 {"type": "FileWritten", "path": "/home/user/id/q3ta/baseq3/pak3.pk3", "ts": 1725356784}
-{"type": "ProcessStarted", "pid": 3132, "ppid": 3840, "name": "mstsc.exe", "ts": 1725356785}
+{"type": "ProcessStarted", "pid": 3132, "ppid": 2981, "name": "mstsc.exe", "ts": 1725356785}
 {"type": "ProcessStarted", "pid": 7696, "ppid": 1904, "name": "regedit.exe", "ts": 1725356786}
 {"type": "FileWritten", "path": "/root/q1/music/track03.ogg", "ts": 1725356787}
 {"type": "FileWritten", "path": "/home/user/id/q3ta/baseq3/pak3.pk3", "ts": 1725356788}
