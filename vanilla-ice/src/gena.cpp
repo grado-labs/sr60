@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
   window::sliding_ar<uint32_t> ar(10s);
   std::vector<std::thread> consumers;
 
-  const constexpr k_consumers = 1;
+  const constexpr auto k_consumers = 1;
   for (size_t i = 0; i < k_consumers; ++i) {
     consumers.emplace_back([&] {
       while (auto line = queue.pop()) {
