@@ -29,13 +29,22 @@ int main(int argc, char* argv[]) {
   std::thread producer1(
       [&] { sucker::read_range(1, logfile, 0, file_size, queue); });
 
+  // Multi-part file reading
+  //
+  // std::thread producer1(
+  //     [&] { sucker::read_range(1, logfile, 0, file_size / 2, queue); });
+  // std::thread producer2(
+  //     [&] { sucker::read_range(2, logfile, file_size / 2, file_size, queue);
+  //     });
+
   /*************************************
    *       N-threaded apply rule       *
    *************************************/
   window::sliding_ar<uint32_t> ar(10s);
   std::vector<std::thread> consumers;
 
-  for (size_t i = 0; i < 5; ++i) {
+  const constexpr k_consumers = 1;
+  for (size_t i = 0; i < k_consumers; ++i) {
     consumers.emplace_back([&] {
       while (auto line = queue.pop()) {
         json j = json::parse(*line);
