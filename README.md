@@ -71,9 +71,9 @@ Piece of software according to functional requirements:
 
 Getting events from file:
 
-- `sensor` thread read `events.log` → push to `queue` // producers;
+- `sensor` aka `producer` multi-thread read `events.log` → push to `queue`;
 - `queue` w/o busy-wait (use condition_variable), back pressure (desired);
-- `exam` thread apply [rule](#1211-ar-10-apply-rule-of-10-seconds) & send alerts // consumers;
+- `exam` aka `consumer` multi-thread → pop from `queue`, send to capacitor queue, arbiter apply [rule](#1211-ar-10-apply-rule-of-10-seconds) → send alerts;
 - grace termination (Ctrl+C);
 
 **Note:** it's better to use **absolute paths** in args.
@@ -107,7 +107,7 @@ Alert must contain:
 - PID of suspicious (aka "fertile" parent) proccess // PPID;
 - list of spawned children PIDs // PIDs
 
-Also source code should demonstrate possible concurrent implementation of **sliding window** based on **timestamps**.
+Also source code should demonstrate usage of **sliding window** based on **timestamps** in multi-threaded environment.
 
 ### 1.2.2. ice (Integrity Check Events)
 

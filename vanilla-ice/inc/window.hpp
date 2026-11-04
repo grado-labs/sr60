@@ -55,7 +55,7 @@ class sliding_ar {
   void expel(TimePoint now) {
     const auto cutoff = now - window_;
 
-    while (!events_.empty() and get<0>(events_.front()) < cutoff) {
+    while (not events_.empty() and get<0>(events_.front()) < cutoff) {
       events_.pop_front();
     }
   }

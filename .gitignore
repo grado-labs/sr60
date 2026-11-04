@@ -22,3 +22,7 @@ playground/
 .doc*
 .tar.?z
 .zip
+
+# Diagnostic output (stderr, stdout)
+err.txt
+out.txt
